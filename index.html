@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script>
+		// temp; will rework with UI
+		const LOST = 0;
+		const WON = 1;
+		const DRAW = 2;
+
+		const ROCK = 0;
+		const PAPER = 1;
+		const SCISSORS = 2;
+
+		const choiceMap = {
+			"rock": ROCK,
+			"paper": PAPER,
+			"scissors": SCISSORS
+		};
+		const choiceMapArr = Object.entries(choiceMap);
+
+		const computerPlay = () => {
+			return ~~(Math.random() * 3);
+		};
+
+		const playerPlay = (playerSelection) => {
+			playerSelection = playerSelection.toLowerCase().replace(/\s/g, "");
+
+			if (playerSelection in choiceMap) {
+				return choiceMap[playerSelection];
+			} else {
+				return 0;
+			}
+		}
+
+		const buildResStr = (result, playerSelection, computerSelection) => {
+			if (result === DRAW) {
+				return "It's a draw!";
+			}
+
+			const choiceConverted = [0, 0];
+
+			for (let i = 0; i < choiceMapArr.length; i++) {
+				if (choiceMapArr[i][1] === playerSelection && choiceConverted[0] === 0) {
+					playerSelection = choiceMapArr[i][0].charAt(0).toUpperCase() + choiceMapArr[i][0].slice(1);
+					choiceConverted[0] = 1;
+				}
+
+				if (choiceMapArr[i][1] === computerSelection && choiceConverted[1] === 0) {
+					computerSelection = choiceMapArr[i][0].charAt(0).toUpperCase() + choiceMapArr[i][0].slice(1);
+					choiceConverted[1] = 1;
+				}
+
+				if (choiceConverted[0][0] === 1 && choiceConverted[0][1] === 1) {
+					break;
+				}
+			}
+
+			return `You ${result === LOST ? "lost" : "won"}! ${result === LOST ? computerSelection : playerSelection} beats ${result === LOST ? playerSelection : computerSelection}`;
+		}
+
+		const playRound = (playerSelection, computerSelection) => {
+			if (
+				(playerSelection === ROCK && computerSelection === PAPER) ||
+				(playerSelection === PAPER && computerSelection === SCISSORS) ||
+				(playerSelection === SCISSORS && computerSelection === ROCK)
+				) {
+					return buildResStr(LOST, playerSelection, computerSelection);
+				}
+			else if (
+				(playerSelection === ROCK && computerSelection === SCISSORS) ||
+				(playerSelection === PAPER && computerSelection === ROCK) ||
+				(playerSelection === SCISSORS && computerSelection === PAPER)
+			) {
+				return buildResStr(WON, playerSelection, computerSelection);
+			} else {
+				return buildResStr(DRAW);
+			}
+		};
+
+		const game = () => {
+			let userChoice = null;
+			for (let i = 0; i < 5; i++) {
+				userChoice = prompt("Rock, Paper or Scissors?", "rock");
+				console.log(playRound(playerPlay(userChoice), computerPlay()));
+			}
+		};
+
+		game();
+	</script>
+	<title>Rock Paper Scissors</title>
+</head>
+<body>
+	
+</body>
+</html>
