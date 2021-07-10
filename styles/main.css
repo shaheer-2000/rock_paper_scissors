@@ -75,6 +75,62 @@ body {
 	transition: font-size 1s;
 }
 
+.disable-pointer {
+	pointer-events: none;
+}
+
+.computer-pick,
+.player-pick {
+	animation: jump 1s both;
+}
+
+@keyframes jump {
+	0% {
+		transform: translateY(0%) scale(1.25, 0.75);
+		animation-timing-function: ease-in;
+	}
+
+	50% {
+		transform: translateY(-100%);
+		animation-timing-function: ease-in;
+	}
+
+	55% {
+		transform: translateY(-100%) rotate(15deg);
+		animation-timing-function: ease-in;
+	}
+
+	60% {
+		transform: translateY(-100%) rotate(-15deg);
+		animation-timing-function: ease-in;
+	}
+
+	65% {
+		transform: translateY(-100%) rotate(15deg);
+		animation-timing-function: ease-in;
+	}
+
+	70% {
+		transform: translateY(-100%) rotate(-15deg);
+		animation-timing-function: ease-in;
+	}
+
+	85% {
+		transform: translateY(-50%);
+		animation-timing-function: ease-out;
+	}
+
+	95% {
+		transform: translateY(0%) scale(1.25, 0.75);
+		animation-timing-function: ease-out;
+	}
+
+	100% {
+		transform: translateY(0%), scale(1, 1);
+		animation-timing-function: ease-out;
+	}
+}
+
 @media screen and (max-width: 548px) {
 	#player-score,
 	#computer-score {

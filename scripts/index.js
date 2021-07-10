@@ -1,3 +1,5 @@
+// TODO: refactor and clean
+
 const FADE_OUT_S = 1000 * 2; // 1000ms => 1s
 
 const LOST = 0;
@@ -58,7 +60,38 @@ const buildResStr = (result, playerSelection, computerSelection) => {
 	return `You ${result === LOST ? "lost" : "won"}! ${result === LOST ? computerSelection : playerSelection} beats ${result === LOST ? playerSelection : computerSelection}`;
 }
 
+const animatePicks = (playerSelection, computerSelection) => {
+	rpsChoiceBoxes.forEach(rpsChoiceBox => {
+		if (computerSelection === ROCK && rpsChoiceBox.children[0].id === "rock" ||
+		computerSelection === PAPER && rpsChoiceBox.children[0].id === "paper" ||
+		computerSelection === SCISSORS && rpsChoiceBox.children[0].id === "scissors") {
+			rpsChoiceBox.children[0].classList.add("computer-pick");
+		}
+
+		if (playerSelection === ROCK && rpsChoiceBox.children[0].id === "rock" ||
+		playerSelection === PAPER && rpsChoiceBox.children[0].id === "paper" ||
+		playerSelection === SCISSORS && rpsChoiceBox.children[0].id === "scissors") {
+			rpsChoiceBox.children[0].classList.add("player-pick");
+		}
+
+	});
+
+	setTimeout(() => {
+		rpsChoiceBoxes.forEach(rpsChoiceBox => {
+			if (rpsChoiceBox.children[0].classList.contains("computer-pick")) {
+				rpsChoiceBox.children[0].classList.remove("computer-pick");
+			}
+
+			if (rpsChoiceBox.children[0].classList.contains("player-pick")) {
+				rpsChoiceBox.children[0].classList.remove("player-pick");
+			}
+		});
+	}, FADE_OUT_S);
+};
+
 const playRound = (playerSelection, computerSelection) => {
+	animatePicks(playerSelection, computerSelection);
+
 	if (
 		(playerSelection === ROCK && computerSelection === PAPER) ||
 		(playerSelection === PAPER && computerSelection === SCISSORS) ||
@@ -100,22 +133,33 @@ const game = (userChoice) => {
 	}
 };
 
+let choiceCounter = 0;
 
 const handleChoiceBox = (rpsChoiceBox) => {
 	rpsChoiceBox.addEventListener("click", (e) => {
 		// handle choice selection here
+
 		game(rpsChoiceBox.children[0].id);
 
-		// rpsChoiceBoxes.forEach(rpsChoiceBox => {
-		// 	rpsChoiceBox.classList.add("fade-out");
-		// });
+		choiceCounter++;
+		if (choiceCounter >= 1) {
+			rpsChoiceBoxes.forEach(rpsChoiceBox => {
+				// rpsChoiceBox.classList.add("fade-out");
+				rpsChoiceBox.classList.add("disable-pointer");
+			});
+		}
 
-		// setTimeout(() => {
-		// 	rpsChoiceBoxes.forEach(rpsChoiceBox => rpsChoiceBox.classList.remove("fade-out"));
-		// }, FADE_OUT_S);
+		setTimeout(() => {
+			rpsChoiceBoxes.forEach(rpsChoiceBox => {
+				// rpsChoiceBox.classList.remove("fade-out");
+				rpsChoiceBox.classList.remove("disable-pointer");
+			});
+			choiceCounter = 0;
+		}, FADE_OUT_S);
 	});
 };
 
 const rpsChoiceBoxes = document.querySelectorAll(".rps-choice-box");
+const idleBoxes = document.querySelectorAll(".idle");
 
 rpsChoiceBoxes.forEach(handleChoiceBox);
