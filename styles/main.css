@@ -41,10 +41,31 @@ body {
 	filter: drop-shadow(0px 0px 2px rgba(255, 220, 65, 0.5));
 }
 
-.fade-out {
-	opacity: 0;
-	top: 100px;
-	pointer-events: none;
+.modal {
+	margin-top: 2rem;
+	text-align: center;
+	font-size: 1.2rem;
+	font-weight: 600;
+	text-transform: capitalize;
+	animation: fade-down 2s ease-in-out;
+}
+
+.success {
+	background-color: rgb(102, 212, 108);
+	border: 1px solid rgb(66, 146, 77);
+	color:rgb(8, 117, 44)
+}
+
+.danger {
+	background-color: rgb(219, 116, 113);
+	border: 1px solid rgb(182, 65, 50);
+	color:rgb(175, 23, 23)
+}
+
+.warning {
+	background-color: rgb(233, 196, 127);
+	border: 1px solid rgb(190, 143, 55);
+	color:rgb(192, 149, 6)
 }
 
 .score-box {
@@ -82,6 +103,17 @@ body {
 .computer-pick,
 .player-pick {
 	animation: jump 1s both;
+}
+
+@keyframes fade-down {
+	0% {
+		opacity: 1;
+	}
+
+	100% {
+		transform: translateY(100%);
+		opacity: 0;
+	}
 }
 
 @keyframes jump {

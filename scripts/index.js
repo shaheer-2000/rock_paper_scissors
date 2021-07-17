@@ -1,6 +1,7 @@
 // TODO: refactor and clean
 
 const FADE_OUT_S = 1000 * 2; // 1000ms => 1s
+const MODAL_SHOW_S = 1000 * 1.8;
 
 const LOST = 0;
 const WON = 1;
@@ -110,6 +111,29 @@ const playRound = (playerSelection, computerSelection) => {
 	}
 };
 
+const refreshScreen = () => {
+	location.reload();
+};
+
+const renderGameOverScreen = () => {
+	const e = mainSection.children[1];
+
+	const btnContainer = document.createElement("div");
+	btnContainer.classList.add("container", "d-flex", "center");
+
+	const playAgainBtn = document.createElement("button");
+	playAgainBtn.id = "play-again-btn";
+	playAgainBtn.textContent = "Play Again";
+	playAgainBtn.style = "margin-top: 50px;"
+
+	btnContainer.appendChild(playAgainBtn);
+
+	playAgainButton = document.querySelector("#play-again-btn");
+	playAgainBtn.addEventListener("click", refreshScreen);
+
+	e.replaceWith(btnContainer);
+};
+
 const incrementScore = (winner) => {
 	winner = winner === PLAYER ? "player" : "computer";
 
@@ -121,16 +145,31 @@ const incrementScore = (winner) => {
 	}
 };
 
-const game = (userChoice) => {
+const game = (playerSelection) => {
 	// Validate Choice Here
 
-	const result = playRound(playerPlay(userChoice), computerPlay());
+	const computerSelection = computerPlay();
+	const [result, resStr] = playRound(playerPlay(playerSelection), computerSelection);
 
-	if (result[0] === WON) {
+	showChoiceModal(result, resStr);
+
+	if (result === WON) {
 		incrementScore(PLAYER);
-	} else if (result[0] === LOST) {
+	} else if (result === LOST) {
 		incrementScore(COMPUTER);
 	}
+};
+
+const showChoiceModal = (result, resStr) => {
+	const choiceModal = document.createElement("div");
+	choiceModal.classList.add("modal", result === WON ? "success" : result === LOST ? "danger" : "warning");
+	choiceModal.textContent = resStr;
+
+	mainSection.appendChild(choiceModal);
+
+	setTimeout(() => {
+		mainSection.removeChild(choiceModal);
+	}, MODAL_SHOW_S);
 };
 
 let choiceCounter = 0;
@@ -160,6 +199,8 @@ const handleChoiceBox = (rpsChoiceBox) => {
 };
 
 const rpsChoiceBoxes = document.querySelectorAll(".rps-choice-box");
+const mainSection = document.querySelector("#main");
 const idleBoxes = document.querySelectorAll(".idle");
+let playAgainButton = document.querySelector("#play-again-btn");
 
 rpsChoiceBoxes.forEach(handleChoiceBox);
